@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Кохання 💗</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffeef5;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff0f6;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(255, 192, 203, 0.7);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      z-index: 10;
+    }
+
+    .popup h2 {
+      color: #d63384;
+      margin-bottom: 20px;
+    }
+
+    .popup button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      background-color: #ffb3d1;
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    .popup button:hover {
+      background-color: #ff69b4;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background: rgba(255, 192, 203, 0.3);
+      z-index: 5;
+    }
+
+     .photos-page {
+    display: none;
+    padding: 40px 20px;
+  }
+
+  .photo-row {
+    display: flex;
+    justify-content: center; /* або flex-start */
+    gap: 10px; /* можна 0, якщо хочеш без відступів */
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* щоб фото не стискувалися */
+  }
+
+  .photo-box {
+    flex: 1 1 calc(33.33% - 10px); /* 3 фото в ряд, враховуючи gap */
+    max-width: 33.33%;
+    aspect-ratio: 1 / 1; /* квадрат */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+    background: white;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .photo-box:hover {
+    transform: scale(1.05);
+  }
+
+  .photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .compliment {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.9);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    display: none;
+    pointer-events: none;
+  }
+  </style>
+</head>
+<body>
+  <div id="overlay"></div>
+
+  <div class="popup" id="popup">
+    <h2>Пане котуль, чи кохаєте ви свою неймовірно чудову, гарну, розумну і дуууже скромну дівчину?</h2>
+    <button onclick="answer(true)">Так</button>
+    <button onclick="answer(false)">Ні</button>
+  </div>
+
+  <div class="photos-page" id="photosPage">
+    <!-- 3 ряди по 5 фото -->
+    <div class="photo-row" id="row1"></div>
+    <div class="photo-row" id="row2"></div>
+    <div class="photo-row" id="row3"></div>
+  </div>
+
+  <script>
+    const compliments = [
+      "Ти найгарніший у світі!",
+      "Мій неймовірний!",
+      "Очі твої то любов!",
+      "Смішний, добрий і мій 😻",
+      "Містер Всесвіт!",
+      "Котяра-романтик!",
+      "Головний негідник 💞",
+      "Чудо ☀️",
+      "Крутіший за всіх!",
+      "Котусик, я тебе обожнюю!",
+      "Ти мій Всесвіт 💫",
+      "Падлюченя ще те",
+      "Солодкий, як полуничка 🍓",
+      "Моє кохання!",
+      "Найкращий у світі хлопець 💖"
+    ];
+
+    const photos = [
+      "https://i.ibb.co/6xT1qqB/kotyk15.jpg",
+      "https://i.ibb.co/jv4ycnmX/kotyk14.jpg",
+      "https://i.ibb.co/mV1RrWCr/kotyk13.jpg",
+      "https://i.ibb.co/qMq2sKdG/kotyk12.jpg",
+      "https://i.ibb.co/fdDfhgMk/kotyk11.jpg",
+      "https://i.ibb.co/d4KRcGSf/kotyk10.jpg",
+      "https://i.ibb.co/M5jq4MsH/kotyk9.jpg",
+      "https://i.ibb.co/TJjfsGy/kotyk8.jpg",
+      "https://i.ibb.co/fGQZHFpc/kotyk7.jpg",
+      "https://i.ibb.co/ZrFYSB2/kotyk6.jpg",
+      "https://i.ibb.co/D3gSmhD/kotyk5.jpg",
+      "https://i.ibb.co/KpNXXFYv/kotyk3.jpg",
+      "https://i.ibb.co/rfqbkz0c/kotyk4.jpg",
+      "https://i.ibb.co/Mknv5hKr/kotyk2.jpg",
+      "https://i.ibb.co/0VsNdXFG/kotyk1.jpg"
+    ];
+
+    function answer(isYes) {
+      const popup = document.getElementById("popup");
+      const overlay = document.getElementById("overlay");
+      const photosPage = document.getElementById("photosPage");
+
+      if (isYes) {
+        alert("Випереджаючи тебе, скажу, так я теж тебе кохаю!!!❤️");
+      } else {
+        alert("НЕГІДНИКУ, я знаю, що ти мене кохаєш");
+      }
+
+      popup.style.display = "none";
+      overlay.style.display = "none";
+      photosPage.style.display = "block";
+
+      renderPhotos();
+    }
+
+    function renderPhotos() {
+      const row1 = document.getElementById("row1");
+      const row2 = document.getElementById("row2");
+      const row3 = document.getElementById("row3");
+
+      for (let i = 0; i < photos.length; i++) {
+        const photoBox = document.createElement("div");
+        photoBox.className = "photo-box";
+
+        const img = document.createElement("img");
+        img.src = photos[i];
+        img.alt = "Фото котика";
+
+        photoBox.appendChild(img);
+
+        // Комплімент при кліку
+        photoBox.addEventListener("click", () => showCompliment(photoBox));
+
+        if (i < 5) {
+          row1.appendChild(photoBox);
+        } else if (i < 10) {
+          row2.appendChild(photoBox);
+        } else {
+          row3.appendChild(photoBox);
+        }
+      }
+    }
+
+    function showCompliment(photoBox) {
+      let complimentBox = photoBox.querySelector(".compliment");
+      if (!complimentBox) {
+        complimentBox = document.createElement("div");
+        complimentBox.className = "compliment";
+        photoBox.appendChild(complimentBox);
+      }
+
+      complimentBox.textContent = compliments[Math.floor(Math.random() * compliments.length)];
+      complimentBox.style.display = "block";
+
+      setTimeout(() => {
+        complimentBox.style.display = "none";
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
